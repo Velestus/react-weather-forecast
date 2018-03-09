@@ -1,0 +1,19 @@
+.WeatherDisplay {
+    font-size: 30px;
+    margin-top: -10px;
+}
+.TempUnit {
+    cursor: pointer;
+    color: #00ADEE;
+    font-size: 30px;
+    margin-top: 10px;
+}
+
+#WeatherImage {
+    margin-top: 12px;
+    font-size: 90px;
+}
+.inline {
+    display: inline-block;
+    margin-left: 6px;
+}
