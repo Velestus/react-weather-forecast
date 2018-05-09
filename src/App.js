@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import WeatherCaption from './weather-caption/weather-caption'
 import ForecastTrigger from './forecast-trigger/forecast-trigger'
@@ -20,13 +19,19 @@ class App extends Component {
     };
   }
   handleClick() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.getWeather);
-    }
+    var app = this;
+    fetch('http://ip-api.com/json').then(res => res.json())
+      .then(function(myJson) {
+        var position = {
+          longitude: myJson.lon,
+          latitude: myJson.lat
+        };
+        app.getWeather(position);
+      });
   }
   getWeather(position) {
-    var longitude = position.coords.longitude;
-    var latitude = position.coords.latitude;
+    var longitude = position.longitude;
+    var latitude = position.latitude;
     var url = "https://fcc-weather-api.glitch.me/api/current?lon="+longitude+"&lat="+latitude;
     fetch(url).then( res => res.json() )
       .then( res => {
@@ -58,7 +63,6 @@ class App extends Component {
   }
   assignWeatherIcon(weather) {
     var iconClass = ''
-    console.log(weather);
     switch (weather.toLowerCase()) {
       case 'drizzle':
         iconClass = 'wi wi-day-sprinkle';
@@ -89,12 +93,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
         <WeatherCaption />
-        <ForecastTrigger onClick={() => this.handleClick()}/>
+        <ForecastTrigger onClick={this.handleClick.bind(this)}/>
         <WeatherDisplay 
           {...this.state}
           onClick={() => this.calculateTempUnit()}
